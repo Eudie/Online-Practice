@@ -10,20 +10,20 @@ import numpy as np
 import tensorflow as tf
 
 
-LR = 1e-3
-
 training_data = np.load('saved.npy')
 
 lstm_layers = 2
 input_size = 4
-batch_size = 32
-rnn_size = 64
-no_of_epochs = 10
+batch_size = 64
+rnn_size = 128
+no_of_epochs = 300
 action_classes = 2
 graph = tf.Graph()
-
+seq = 20
 x = np.array([i[0] for i in training_data])
-test_batch_input = x[:24]
+y = np.array([i[1] for i in training_data])
+x_1 = x[:24]
+y_1 = y[:24]
 
 
 def get_batches(int_text, batch_size_, seq_length_):
@@ -49,11 +49,10 @@ def get_batches(int_text, batch_size_, seq_length_):
 
     return output
 
-get_batches(test_batch_input, batch_size_=2, seq_length_=3)
-
-quit()
-
-
+x_batch = get_batches(x, batch_size_=batch_size, seq_length_=seq)
+y_batch = get_batches(y, batch_size_=batch_size, seq_length_=seq)
+lr = 0.01
+graph = tf.Graph()
 with graph.as_default():
     inputs = tf.placeholder(tf.float32, [None, None, input_size])
     action = tf.placeholder(tf.float32, [None, None, action_classes])
@@ -64,24 +63,48 @@ with graph.as_default():
     initial_state = cell.zero_state(batch_size, tf.float32)
     Outputs, FinalState = tf.nn.dynamic_rnn(cell, inputs, initial_state=initial_state, dtype=tf.float32)
 
-    logit = tf.contrib.layers.fully_connected(Outputs, 2, activation_fn=None)
+    logit = tf.contrib.layers.fully_connected(Outputs, action_classes, activation_fn=None)
+
     prediction = tf.nn.softmax(logit)
 
-    cross_entropy = -tf.reduce_sum(action * tf.log(tf.clip_by_value(prediction, 1e-10, 1.0)))
+    ##################
+    # logit_reshaped = tf.reshape(logit, [-1, 2])
+    # y_reshaped = tf.reshape(action, [-1, 2])
+    # loss = tf.nn.softmax_cross_entropy_with_logits(logits=logit_reshaped, labels=y_reshaped)
+    # cost = tf.reduce_mean(loss)
+    #
+    # # Optimizer for training, using gradient clipping to control exploding gradients
+    # tvars = tf.trainable_variables()
+    # grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars), 5)
+    # train_op = tf.train.AdamOptimizer(learning_rate)
+    # optimizer_1 = train_op.apply_gradients(zip(grads, tvars))
+    # #################
 
-    optimizer = tf.train.AdamOptimizer()
+    cross_entropy = -tf.reduce_mean(action * tf.log(tf.clip_by_value(prediction,1e-10, 1.0)))
+
+    optimizer = tf.train.AdamOptimizer(learning_rate)
     minimize = optimizer.minimize(cross_entropy)
 
-    mistakes = tf.not_equal(tf.argmax(action, 1), tf.argmax(prediction, 1))
+    mistakes = tf.not_equal(tf.argmax(action, 2), tf.argmax(prediction, 2))
     error = tf.reduce_sum(tf.cast(mistakes, tf.float32))
 
     saver = tf.train.Saver(tf.all_variables())
-    init = tf.initialize_all_variables()
-
+    init = tf.global_variables_initializer()
 
 
 with tf.Session(graph=graph) as sess:
     sess.run(init)
 
-    for step in range(no_of_epochs):
-        a
+    for epoch_i in range(no_of_epochs):
+        state = sess.run(initial_state)
+        for i in range(len(x_batch)):
+            feed = {inputs: x_batch[i],
+                    action: y_batch[i],
+                    initial_state: state,
+                    learning_rate: lr}
+
+            error_1, cn, _ = sess.run([error, cross_entropy, minimize], feed_dict=feed)
+            print(error_1)
+            print(cn)
+
+
