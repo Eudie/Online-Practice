@@ -93,6 +93,9 @@ with graph.as_default():
     init = tf.global_variables_initializer()
 
 
+def to_matrix(l, n):
+    return [l[i:i+n] for i in range(0, len(l), n)]
+
 env = gym.make("CartPole-v0")
 env.reset()
 goal_steps = 500
@@ -109,26 +112,27 @@ with tf.Session(graph=graph) as sess:
         game_memory = []
         prev_obs = []
         env.reset()
+        counter = 0
         for _ in range(goal_steps):
             env.render()
 
             if len(prev_obs) == 0:
                 action = random.randrange(0, 2)
             else:
-                pred = sess.run(prediction, feed_dict={inputs: [[prev_obs]], keep_prob: dropout_prob})
-                action = np.argmax(pred[0])
+                pred = sess.run(prediction, feed_dict={inputs: [prev_obs], keep_prob: dropout_prob})
+                action = np.argmax(pred[:, -1][0])
 
             choices.append(action)
 
             new_observation, reward, done, info = env.step(action)
-            prev_obs = new_observation
+            # prev_obs.append(new_observation)  # Average score: ~70
+            prev_obs = [new_observation]  # Average score: ~170
             game_memory.append([new_observation, action])
             score += reward
             if done:
                 break
 
         scores.append(score)
-
 
 print('Average Score:', sum(scores) / len(scores))
 print('choice 1:{}  choice 0:{}'.format(choices.count(1) / len(choices), choices.count(0) / len(choices)))
