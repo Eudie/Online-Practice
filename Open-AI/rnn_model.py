@@ -19,12 +19,9 @@ batch_size = 256
 rnn_size = 256
 no_of_epochs = 750
 action_classes = 2
-graph = tf.Graph()
 seq = 20
 x = np.array([i[0] for i in training_data])
 y = np.array([i[1] for i in training_data])
-x_1 = x[:24]
-y_1 = y[:24]
 
 
 def get_batches(int_text, batch_size_, seq_length_):
@@ -77,18 +74,6 @@ with graph.as_default():
         prediction = tf.nn.softmax(logit, name='prediction')
         tf.summary.histogram('predictions', prediction)
 
-    ##################
-    # logit_reshaped = tf.reshape(logit, [-1, 2])
-    # y_reshaped = tf.reshape(action, [-1, 2])
-    # loss = tf.nn.softmax_cross_entropy_with_logits(logits=logit_reshaped, labels=y_reshaped)
-    # cost = tf.reduce_mean(loss)
-    #
-    # # Optimizer for training, using gradient clipping to control exploding gradients
-    # tvars = tf.trainable_variables()
-    # grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars), 5)
-    # train_op = tf.train.AdamOptimizer(learning_rate)
-    # optimizer_1 = train_op.apply_gradients(zip(grads, tvars))
-    # #################
     with tf.name_scope("loss"):
         cross_entropy = -tf.reduce_mean(action * tf.log(tf.clip_by_value(prediction, 1e-10, 1.0)))
         tf.summary.scalar('cross_entropy', cross_entropy)

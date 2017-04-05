@@ -9,9 +9,6 @@ First I will just replicate then look to improve upon that
 import gym
 import random
 import numpy as np
-import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.estimator import regression
 import tensorflow as tf
 
 
@@ -20,34 +17,7 @@ lstm_layers = 2
 input_size = 4
 batch_size = 1
 rnn_size = 256
-no_of_epochs = 750
 action_classes = 2
-graph = tf.Graph()
-seq = 20
-
-
-def get_batches(int_text, batch_size_, seq_length_):
-    """
-    Return batches of input and target
-    :param int_text: Text with the words replaced by their ids
-    :param batch_size_: The size of batch
-    :param seq_length_: The length of sequence
-    :return: Batches as a Numpy array
-    """
-    total_batch = len(int_text) // (batch_size_ * seq_length_)
-    len_to_consider = int(total_batch * batch_size_ * seq_length_)
-    features_ = len(int_text[0])
-
-    input_text = np.array(int_text[:len_to_consider])
-    input_text = np.split(input_text, total_batch * batch_size_)
-
-    output = np.empty((total_batch, batch_size_, seq_length_, features_))
-
-    for i in range(batch_size_):
-        for j in range(total_batch):
-            output[j][i] = input_text[total_batch*i + j]
-
-    return output
 
 
 graph = tf.Graph()
@@ -92,9 +62,6 @@ with graph.as_default():
     saver = tf.train.Saver(tf.global_variables())
     init = tf.global_variables_initializer()
 
-
-def to_matrix(l, n):
-    return [l[i:i+n] for i in range(0, len(l), n)]
 
 env = gym.make("CartPole-v0")
 env.reset()
