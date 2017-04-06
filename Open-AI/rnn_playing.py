@@ -95,8 +95,8 @@ with tf.Session(graph=graph) as sess:
             choices.append(action)
 
             new_observation, reward, done, info = env.step(action)
-            prev_obs.append(new_observation)  # Average score: ~140
-            # prev_obs = [new_observation]  # Average score: ~90
+            # prev_obs.append(new_observation)  # Average score: ~70
+            prev_obs = [new_observation]  # Average score: ~170
             game_memory.append([new_observation, action])
             score += reward
             if done:
