@@ -3,7 +3,9 @@
 # Author: Eudie
 """
 Here I am trying to just replicate the tutorial given by sentdex on learning how to play OpenAI game.
-First I will just replicate then look to improve upon that
+First I will just replicate then look to improve upon that.
+
+Here I am playing cartpole using RNN learning.
 """
 
 import gym
@@ -16,7 +18,7 @@ dropout_prob = 1
 lstm_layers = 2
 input_size = 4
 batch_size = 1
-rnn_size = 512
+rnn_size = 256
 action_classes = 2
 
 
@@ -73,7 +75,7 @@ choices = []
 
 with tf.Session(graph=graph) as sess:
     sess.run(init)
-    saver.restore(sess, "saved_models/rnn/rnn_512_1000_1.ckpt")
+    saver.restore(sess, "saved_models/rnn/rnn_256_750_0.ckpt")
 
     for each_game in range(10):
         score = 0
