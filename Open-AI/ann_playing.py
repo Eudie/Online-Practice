@@ -42,13 +42,13 @@ def neural_network_model(input_size):
 
     network = fully_connected(network, 2, activation='softmax')
     network = regression(network, learning_rate=LR,  name='targets')
-    model = tflearn.DNN(network, tensorboard_dir='log')
+    model = tflearn.DNN(network, tensorboard_dir='logs/ann/ann_0')
 
     return model
 
 
 ann_model = neural_network_model(4)
-ann_model.load('ann_model.tflearn')
+ann_model.load('saved_model/ann/ann_model.tflearn')
 
 
 env = gym.make("CartPole-v0")

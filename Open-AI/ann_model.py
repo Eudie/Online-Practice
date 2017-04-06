@@ -14,7 +14,7 @@ from tflearn.layers.estimator import regression
 
 LR = 1e-3
 
-training_data = np.load('saved.npy')
+training_data = np.load('data/saved.npy')
 
 
 def neural_network_model(input_size):
@@ -42,7 +42,7 @@ def neural_network_model(input_size):
 
     network = fully_connected(network, 2, activation='softmax')
     network = regression(network, optimizer='adam', learning_rate=LR, loss='categorical_crossentropy', name='targets')
-    model = tflearn.DNN(network, tensorboard_dir='log')
+    model = tflearn.DNN(network, tensorboard_dir='logs/ann/ann_0')
 
     return model
 
@@ -60,7 +60,7 @@ def train_model(data, model=False):
         model = neural_network_model(input_size=len(x[0]))
 
     model.fit({'input': x}, {'targets': y}, n_epoch=20, snapshot_step=500, show_metric=True, run_id='openai_learning')
-    model.save('ann_model.tflearn')
+    model.save('saved_model/ann/ann_model.tflearn')
     return model
 
 ann_model = train_model(training_data)
