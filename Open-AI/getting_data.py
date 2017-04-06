@@ -17,7 +17,7 @@ env = gym.make("CartPole-v0")
 env.reset()
 goal_steps = 500
 score_requirement = 50
-initial_games = 10000
+initial_games = 100000
 
 
 def some_random_games_first():
@@ -31,7 +31,7 @@ def some_random_games_first():
             # This will display the environment
             # Only display if you really want to see it.
             # Takes much longer to display it.
-            env.render()
+            # env.render()
 
             # This will just create a sample action in any environment.
             # In this environment, the action can be 0 or 1, which is left or right
@@ -92,8 +92,9 @@ def initial_population():
         # reached.
         if score >= score_requirement:
             accepted_scores.append(score)
-            for data in game_memory:
+            for i in range(20):
                 # convert to one-hot (this is the output layer for our neural network)
+                data = game_memory[i]
                 if data[1] == 1:
                     output = [0, 1]
                 else:
@@ -109,7 +110,8 @@ def initial_population():
 
     # just in case you wanted to reference later
     training_data_save = np.array(training_data)
-    np.save('saved.npy', training_data_save)
+    print(len(training_data_save))
+    np.save('data/training_for_rnn.npy', training_data_save)
 
     # some stats here, to further illustrate the neural network magic!
     print('Average accepted score:', mean(accepted_scores))

@@ -1,2 +1,2 @@
-model_checkpoint_path: "rnn_256_750_0.ckpt"
-all_model_checkpoint_paths: "rnn_256_750_0.ckpt"
+model_checkpoint_path: "rnn_256_1000_0.ckpt"
+all_model_checkpoint_paths: "rnn_256_1000_0.ckpt"

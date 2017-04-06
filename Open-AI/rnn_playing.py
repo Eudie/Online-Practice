@@ -16,7 +16,7 @@ dropout_prob = 1
 lstm_layers = 2
 input_size = 4
 batch_size = 1
-rnn_size = 256
+rnn_size = 512
 action_classes = 2
 
 
@@ -64,15 +64,16 @@ with graph.as_default():
 
 
 env = gym.make("CartPole-v0")
+env.mode = 'normal'
 env.reset()
-goal_steps = 500
+goal_steps = 5000
 scores = []
 choices = []
 
 
 with tf.Session(graph=graph) as sess:
     sess.run(init)
-    saver.restore(sess, "saved_models/rnn/rnn_256_750_0.ckpt")
+    saver.restore(sess, "saved_models/rnn/rnn_512_1000_1.ckpt")
 
     for each_game in range(10):
         score = 0
@@ -92,8 +93,8 @@ with tf.Session(graph=graph) as sess:
             choices.append(action)
 
             new_observation, reward, done, info = env.step(action)
-            # prev_obs.append(new_observation)  # Average score: ~70
-            prev_obs = [new_observation]  # Average score: ~170
+            prev_obs.append(new_observation)  # Average score: ~140
+            # prev_obs = [new_observation]  # Average score: ~90
             game_memory.append([new_observation, action])
             score += reward
             if done:

@@ -10,14 +10,14 @@ import numpy as np
 import tensorflow as tf
 
 
-training_data = np.load('saved.npy')
+training_data = np.load('data/training_for_rnn.npy')
 
 dropout_prob = 0.8
 lstm_layers = 2
 input_size = 4
 batch_size = 256
 rnn_size = 256
-no_of_epochs = 750
+no_of_epochs = 1000
 action_classes = 2
 seq = 20
 x = np.array([i[0] for i in training_data])
@@ -95,7 +95,7 @@ with graph.as_default():
 
 with tf.Session(graph=graph) as sess:
     sess.run(init)
-    train_writer = tf.summary.FileWriter('logs/rnn/rnn_256_750_0', sess.graph)
+    train_writer = tf.summary.FileWriter('logs/rnn/rnn_256_1000_0', sess.graph)
 
     for epoch_i in range(no_of_epochs):
         state = sess.run(initial_state)
@@ -111,4 +111,4 @@ with tf.Session(graph=graph) as sess:
 
             train_writer.add_summary(summary, iteration)
 
-    save_path = saver.save(sess, "saved_models/rnn/rnn_256_750_0.ckpt")
+    save_path = saver.save(sess, "saved_models/rnn/rnn_256_1000_0.ckpt")
