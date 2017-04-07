@@ -136,8 +136,10 @@ def sample(checkpoint, n_samples, lstm_size, vocab_size, prime="The "):
 
     return ''.join(samples)
 
-checkpoint = "saved_models/0/checkpoints/i860_l512_v1.427.ckpt"
+checkpoint = "saved_models/0/checkpoints/i21200_l512_v1.218.ckpt"
 
 lstm_size = 512
-samp = sample(checkpoint, 2000, lstm_size, len(vocab), prime="BAE")
-print(samp)
+samp = sample(checkpoint, 2000, lstm_size, len(vocab), prime="Eudie:")
+
+with open('results/0.txt', mode='w', encoding='utf-8') as file:
+    file.write(samp)

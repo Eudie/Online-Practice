@@ -17,18 +17,23 @@ import tensorflow as tf
 with open('data/WhatsApp.csv', encoding='utf-8') as f:
     text = f.read()
 
-vocab = set(text)
-vocab_to_int = {c: i for i, c in enumerate(vocab)}
-int_to_vocab = dict(enumerate(vocab))
+###############################################################################
+# For the first time
+###############################################################################
+# vocab = set(text)
+# vocab_to_int = {c: i for i, c in enumerate(vocab)}
+# int_to_vocab = dict(enumerate(vocab))
+# pickle.dump({'vocab_to_int': vocab_to_int, 'int_to_vocab': int_to_vocab, 'vocab': vocab},
+#             open('saved_models/0/dictionaries.pkl', 'wb'))
+###############################################################################
+
+
+dictionaries = pickle.load(open('saved_models/0/dictionaries.pkl', 'rb'))
+vocab_to_int = dictionaries['vocab_to_int']
+int_to_vocab = dictionaries['int_to_vocab']
+vocab = dictionaries['vocab']
+
 chars = np.array([vocab_to_int[c] for c in text], dtype=np.int32)
-
-pickle.dump({'vocab_to_int': vocab_to_int, 'int_to_vocab': int_to_vocab, 'vocab': vocab},
-            open('saved_models/0/dictionaries.pkl', 'wb'))
-
-# dictionaries = pickle.load(open('saved_models/0/dictionaries.pkl, 'rb'))
-# vocab_to_int = dictionaries['vocab_to_int']
-# int_to_vocab = dictionaries['int_to_vocab']
-# vocab = dictionaries['vocab']
 
 
 def split_data(chars, batch_size, num_steps, split_frac=0.9):
@@ -154,7 +159,7 @@ num_layers = 2
 learning_rate = 0.001
 keep_prob = 0.7
 
-epochs = 20
+epochs = 50
 # Save every N iterations
 save_every_n = 200
 train_x, train_y, val_x, val_y = split_data(chars, batch_size, num_steps)
@@ -171,7 +176,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     # Use the line below to load a checkpoint and resume training
-    # saver.restore(sess, 'saved_models/0/checkpoints/______.ckpt')
+    saver.restore(sess, 'saved_models/0/checkpoints/i860_l512_v1.427.ckpt')
 
     n_batches = int(train_x.shape[1] / num_steps)
     iterations = n_batches * epochs
@@ -210,7 +215,7 @@ with tf.Session() as sess:
 
                 print('Validation loss:', np.mean(val_loss),
                       'Saving checkpoint!')
-                saver.save(sess, "saved_models/0/checkpoints/i{}_l{}_v{:.3f}.ckpt".format(iteration, lstm_size, np.mean(val_loss)))
+                saver.save(sess, "saved_models/0/checkpoints/i2{}_l{}_v{:.3f}.ckpt".format(iteration, lstm_size, np.mean(val_loss)))
 
 
 
