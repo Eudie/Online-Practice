@@ -1,8 +1,26 @@
 <component name="ProjectDictionaryState">
   <dictionary name="eudie">
     <words>
+      <w>ckpt</w>
+      <w>dataset</w>
+      <w>dtest</w>
+      <w>dtrain</w>
+      <w>dvalidation</w>
       <w>eudie</w>
+      <w>frac</w>
+      <w>logit</w>
+      <w>logloss</w>
+      <w>lstm</w>
+      <w>openai</w>
+      <w>pred</w>
+      <w>preds</w>
+      <w>relu</w>
       <w>sentdex</w>
+      <w>softmax</w>
+      <w>softprob</w>
+      <w>tensorflow</w>
+      <w>texting</w>
+      <w>tflearn</w>
     </words>
   </dictionary>
 </component>
