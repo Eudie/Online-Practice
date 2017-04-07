@@ -16,7 +16,7 @@ import tensorflow as tf
 import pickle
 
 
-dictionaries = pickle.load(open('saved_models/0/dictionaries.pkl', 'rb'))
+dictionaries = pickle.load(open('saved_models/1/dictionaries.pkl', 'rb'))
 vocab_to_int = dictionaries['vocab_to_int']
 int_to_vocab = dictionaries['int_to_vocab']
 vocab = dictionaries['vocab']
@@ -136,10 +136,10 @@ def sample(checkpoint, n_samples, lstm_size, vocab_size, prime="The "):
 
     return ''.join(samples)
 
-checkpoint = "saved_models/0/checkpoints/i21200_l512_v1.218.ckpt"
+checkpoint = "saved_models/1/checkpoints/W_G_i2400_l512_v0.859.ckpt"
 
 lstm_size = 512
 samp = sample(checkpoint, 2000, lstm_size, len(vocab), prime="Eudie:")
 
-with open('results/0.txt', mode='w', encoding='utf-8') as file:
+with open('results/3.txt', mode='w', encoding='utf-8') as file:
     file.write(samp)
