@@ -1,0 +1,6 @@
+model_checkpoint_path: "i860_l512_v1.427.ckpt"
+all_model_checkpoint_paths: "i200_l512_v2.110.ckpt"
+all_model_checkpoint_paths: "i400_l512_v1.783.ckpt"
+all_model_checkpoint_paths: "i600_l512_v1.600.ckpt"
+all_model_checkpoint_paths: "i800_l512_v1.459.ckpt"
+all_model_checkpoint_paths: "i860_l512_v1.427.ckpt"
