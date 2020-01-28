@@ -105,7 +105,7 @@ ssh-import-id==5.5
 statsmodels==0.8.0
 system-service==0.3
 tensorflow==0.10.0
-tensorflow-gpu==1.0.1
+tensorflow-gpu==1.15.2
 termcolor==1.1.0
 terminado==0.6
 testpath==0.3
